@@ -1,0 +1,12 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY . .
+# Drop any bin/obj uploaded from a Windows machine so restore produces Linux assets.
+RUN rm -rf bin obj && dotnet publish Backend.csproj -c Release -o /app
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+WORKDIR /app
+COPY --from=build /app .
+ENV PORT=80
+EXPOSE 80
+ENTRYPOINT ["dotnet", "Backend.dll"]

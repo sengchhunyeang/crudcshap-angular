@@ -1,0 +1,36 @@
+<main>
+  <h1>Products <small>ASP.NET + Angular + Neon</small></h1>
+
+  <form (ngSubmit)="save()" class="card">
+    <input name="name" [(ngModel)]="form.name" placeholder="Product name" required />
+    <input name="price" type="number" step="0.01" min="0" [(ngModel)]="form.price" placeholder="Price" />
+    <button type="submit" [disabled]="!form.name.trim()">{{ editingId() === null ? 'Add' : 'Update' }}</button>
+    @if (editingId() !== null) { <button type="button" class="secondary" (click)="cancel()">Cancel</button> }
+  </form>
+
+  @if (error()) { <p class="error">{{ error() }}</p> }
+
+  @if (loading()) {
+    <p>Loading…</p>
+  } @else {
+    <table>
+      <thead><tr><th>#</th><th>Name</th><th>Price</th><th>Created</th><th></th></tr></thead>
+      <tbody>
+        @for (p of products(); track p.id) {
+          <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.price | currency }}</td>
+            <td>{{ p.createdAt | date: 'short' }}</td>
+            <td class="actions">
+              <button class="secondary" (click)="edit(p)">Edit</button>
+              <button class="danger" (click)="remove(p)">Delete</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr><td colspan="5" class="empty">No products yet. Add one above.</td></tr>
+        }
+      </tbody>
+    </table>
+  }
+</main>

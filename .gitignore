@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+.vercel
+node_modules/
+dist/
+.angular/
+bin/
+obj/
+.vs/
+
+.vercel
+.env*
